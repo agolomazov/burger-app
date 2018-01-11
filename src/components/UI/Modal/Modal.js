@@ -1,0 +1,41 @@
+import React, { Component, Fragment } from 'react';
+import ReactDOM from 'react-dom';
+import classes from './Modal.css';
+import Backdrop from '../Backdrop/Backdrop';
+
+class Modal extends Component {
+  componentDidMount() {
+    window.addEventListener('keyup', e => {
+      if (e.keyCode === 27 && this.props.show) {
+        this.props.modalClosed();
+      }
+    });
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return (
+      nextProps.show !== this.props.show ||
+      nextProps.children !== this.props.children
+    );
+  }
+
+  render() {
+    return ReactDOM.createPortal(
+      <Fragment>
+        <Backdrop {...this.props} clicked={this.props.modalClosed} />
+        <div
+          className={classes.Modal}
+          style={{
+            transform: this.props.show ? 'translateY(0)' : 'translateY(-100vh)',
+            opacity: this.props.show ? '1' : '0'
+          }}
+        >
+          {this.props.children}
+        </div>
+      </Fragment>,
+      document.getElementById('portal')
+    );
+  }
+}
+
+export default Modal;
