@@ -8,20 +8,21 @@ import App from './App';
 import {BrowserRouter} from 'react-router-dom';
 import registerServiceWorker from './registerServiceWorker';
 
-import reducer from './store/reducers/burgerBuilder';
+import burgerBuilderReducer from './store/reducers/burgerBuilder';
 
-const logger = store => {
-  return next => {
-    return action => {
-      console.log('[Middleware] Dispatching ', action);
-      const result = next(action);
-      console.log('[Middleware] next state', store.getState());
-      return result;
-    }
-  }
-}
+// Example simple middleware
+// const logger = store => {
+//   return next => {
+//     return action => {
+//       console.log('[Middleware] Dispatching ', action);
+//       const result = next(action);
+//       console.log('[Middleware] next state', store.getState());
+//       return result;
+//     }
+//   }
+// }
 
-const store = createStore(reducer, composeWithDevTools(applyMiddleware(logger)));
+const store = createStore(burgerBuilderReducer, composeWithDevTools(applyMiddleware()));
 
 const app = (
   <Provider store={store}>

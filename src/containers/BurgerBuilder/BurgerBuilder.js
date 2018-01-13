@@ -1,13 +1,11 @@
 import React, {Component, Fragment} from 'react';
 import Burger from '../../components/Burger/Burger';
-
 import {connect} from 'react-redux';
-import * as actions from '../../store/actions/actionTypes';
-
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
 import Modal from '../../components/UI/Modal/Modal';
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
 import Spinner from '../../components/UI/Spinner/Spinner';
+import * as burgerBuilderActions from '../../store/actions/index';
 
 class BurgerBuilder extends Component {
   state = {
@@ -104,8 +102,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onIngredientAdded: (ingredient) => dispatch({type: actions.ADD_INGREDIENT, ingredientName: ingredient}),
-  onIngredientRemoved: (igName) => dispatch({type: actions.REMOVE_INGREDIENT, ingredientName: igName})
+  onIngredientAdded: (igName) => dispatch(burgerBuilderActions.addIngredient(igName)),
+  onIngredientRemoved: (igName) => dispatch(burgerBuilderActions.removeIngredient(igName))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(BurgerBuilder);
