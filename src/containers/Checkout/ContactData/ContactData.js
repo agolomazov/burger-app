@@ -6,6 +6,8 @@ import WithErrorHandler from '../../../hoc/WithErrorHandler/WithErrorHandler';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import Input from '../../../components/UI/Input/Input';
 
+import { connect } from 'react-redux';
+
 class ContactData extends Component {
   state = {
     orderForm: {
@@ -114,19 +116,19 @@ class ContactData extends Component {
     }
 
     const order = {
-      ingredients: this.props.ingredients,
+      ingredients: this.props.ings,
       price: this.props.price,
       orderData: {...formData}
     };
     axios
     .post('/orders.json', order)
-    .then(response => {
+    .then(() => {
       this.setState({
         loading: false
       });
       this.props.history.push('/');
     })
-    .catch(error => {
+    .catch(() => {
       this.setState({
         loading: false
       });
@@ -238,4 +240,9 @@ class ContactData extends Component {
   }
 }
 
-export default WithErrorHandler(ContactData, axios);
+const mapStateToProps = state => ({
+  ings: state.ingredients,
+  price: state.totalPrice
+});
+
+export default connect(mapStateToProps)(WithErrorHandler(ContactData, axios));

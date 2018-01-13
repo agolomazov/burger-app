@@ -95,6 +95,7 @@
     "extends": "react-app"
   },
   "devDependencies": {
-    "prettier-webpack-plugin": "^0.2.2"
+    "prettier-webpack-plugin": "^0.2.2",
+    "redux-devtools-extension": "^2.13.2"
   }
 }
