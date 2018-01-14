@@ -5,9 +5,10 @@ export const authStart = () => ({
   type: actions.AUTH_START
 });
 
-export const authSuccess = (authData) => ({
+export const authSuccess = (token, userId) => ({
   type: actions.AUTH_SUCCESS,
-  authData
+  token,
+  userId
 });
 
 export const authFail = (error) => ({
@@ -30,7 +31,7 @@ export const auth = (email, password, isSignup) => {
       password,
       returnSecureToken: true
     }).then(response => {
-      dispatch(authSuccess(response.data));
+      dispatch(authSuccess(response.data.idToken, response.data.localId));
     }).catch(error => {
       dispatch(authFail(error));
     })
