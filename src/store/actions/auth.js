@@ -1,20 +1,32 @@
-import * as actions from './actionTypes';
+import * as actionTypes from './actionTypes';
 import axios from 'axios';
 
 export const authStart = () => ({
-  type: actions.AUTH_START
+  type: actionTypes.AUTH_START
 });
 
 export const authSuccess = (token, userId) => ({
-  type: actions.AUTH_SUCCESS,
+  type: actionTypes.AUTH_SUCCESS,
   token,
   userId
 });
 
 export const authFail = (error) => ({
-  type: actions.AUTH_FAIL,
+  type: actionTypes.AUTH_FAIL,
   error
 });
+
+export const logout = () => ({
+  type: actionTypes.AUTH_LOGOUT
+})
+
+export const checkAuthTimeout = (expirationTime) => {
+  return dispatch => {
+    setTimeout(() => {
+      dispatch(logout());
+    }, expirationTime * 1000);
+  }
+}
 
 export const auth = (email, password, isSignup) => {
   return dispatch => {
@@ -32,8 +44,9 @@ export const auth = (email, password, isSignup) => {
       returnSecureToken: true
     }).then(response => {
       dispatch(authSuccess(response.data.idToken, response.data.localId));
+      dispatch(checkAuthTimeout(response.data.expiresIn))
     }).catch(error => {
-      dispatch(authFail(error));
+      dispatch(authFail(error.response.data.error));
     })
   }
 }
