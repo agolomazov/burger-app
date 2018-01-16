@@ -46,7 +46,7 @@ const BuildControls = props => (
       disabled={!props.purchasable}
       onClick={props.ordered}
     >
-      Оформить заказ
+      {props.isAuth ? 'Оформить заказ' : 'Войти для оформления заказа'}
     </button>
   </div>
 );
