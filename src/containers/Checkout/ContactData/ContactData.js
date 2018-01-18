@@ -6,6 +6,7 @@ import WithErrorHandler from '../../../hoc/WithErrorHandler/WithErrorHandler';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import Input from '../../../components/UI/Input/Input';
 import * as actions from '../../../store/actions/index';
+import { updateObject } from '../../../shared/utility';
 
 import { connect } from 'react-redux';
 
@@ -115,7 +116,8 @@ class ContactData extends Component {
     const order = {
       ingredients: this.props.ings,
       price: this.props.price,
-      orderData: {...formData}
+      orderData: {...formData},
+      userId: this.props.userId
     };
     this.props.onOrderBurger(order, this.props.token);
   }
@@ -143,18 +145,14 @@ class ContactData extends Component {
   }
 
   inputChangedHandler = (event, key) => {
-    const updatedOrderForm = {
-      ...this.state.orderForm
-    }
-
-    const updatedOrderElement = {
-      ...updatedOrderForm[key]
-    }
-
-    updatedOrderElement.value = event.target.value;
-    updatedOrderElement.valid = this.checkValidity(updatedOrderElement.value, updatedOrderElement.validation);
-    updatedOrderElement.touched = true;
-    updatedOrderForm[key] = updatedOrderElement;
+    const updatedOrderElement = updateObject(this.state.orderForm[key], {
+      value: event.target.value,
+      valid: this.checkValidity(event.target.value, this.state.orderForm[key].validation),
+      touched: true
+    });
+    const updatedOrderForm = updateObject(this.state.orderForm, {
+      [key]: updatedOrderElement
+    })
     this.setState({
       orderForm: updatedOrderForm
     })
@@ -229,7 +227,8 @@ const mapStateToProps = state => ({
   ings: state.burgerBuilder.ingredients,
   price: state.burgerBuilder.totalPrice,
   loading: state.order.loading,
-  token: state.auth.token
+  token: state.auth.token,
+  userId: state.auth.userId
 });
 
 const mapDispatchToProps = dispatch => ({
