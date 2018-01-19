@@ -19,7 +19,8 @@ const rootReducer = combineReducers({
   auth: authReducer
 })
 
-const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk)));
+const middleware = process.env.NODE_ENV === 'development' ? composeWithDevTools(applyMiddleware(thunk)) : applyMiddleware(thunk);
+const store = createStore(rootReducer, middleware);
 
 const app = (
   <Provider store={store}>
@@ -31,4 +32,4 @@ const app = (
 
 ReactDOM.render(
   app, document.getElementById('root'));
-registerServiceWorker();
+
