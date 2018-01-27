@@ -17,13 +17,11 @@ export function* fetchOrdersSaga(action) {
   const queryParams = `auth=${action.token}&orderBy="userId"&equalTo="${action.userId}"`;
   try{
     const response = yield axios.get(`/orders.json?${queryParams}`);
-    const fetchedOrders = [];
-    for(let key in response.data) {
-      fetchedOrders.push({
-        ...response.data[key],
-        id: key
-      })
-    }
+    let fetchedOrders = [];
+    fetchedOrders = Object.keys(response.data).map(key => ({
+      ...response.data[key],
+      id: key
+    }))
     yield put(actions.fetchOrdersSuccess(fetchedOrders));
   } catch (err) {
     yield put(actions.fetchOrdersFail(err.response.data.error));
